@@ -43,11 +43,24 @@ app.set('view engine', 'ejs');
 // ----------------------
 // ------- Routes -------
 // ----------------------
+app.get('/', showHouses);
+
 
 
 // --------------------------------
 // ---- Pages Routes functions ----
 // --------------------------------
+function showHouses(req,res){
+    let homeArr = [];
+    let url = ('http://hp-api.herokuapp.com/api/characters')
+    superagent.get(url).then(data =>{
+        data.body.forEach(data =>{
+            homeArr.push(new Home(data));
+
+        })
+        res.render('index', {result:homeArr});
+    })
+}
 
 
 
@@ -56,6 +69,10 @@ app.set('view engine', 'ejs');
 // -----------------------------------
 
 
+function Home(data){
+    this.house = data.house;
+    this.image = data.image;
+}
 
 // Express Runtime
 client.connect().then(() => {
